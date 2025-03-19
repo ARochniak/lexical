@@ -25,7 +25,6 @@ import {
 } from '@lexical/table';
 import {calculateZoomLevel, mergeRegister} from '@lexical/utils';
 import {$getNearestNodeFromDOMNode, isHTMLElement} from 'lexical';
-import * as React from 'react';
 import {
   CSSProperties,
   PointerEventHandler,
@@ -46,7 +45,6 @@ type PointerPosition = {
 type PointerDraggingDirection = 'right' | 'bottom';
 
 const MIN_ROW_HEIGHT = 33;
-const MIN_COLUMN_WIDTH = 92;
 
 function TableCellResizer({editor}: {editor: LexicalEditor}): JSX.Element {
   const targetRef = useRef<HTMLElement | null>(null);
@@ -298,8 +296,12 @@ function TableCellResizer({editor}: {editor: LexicalEditor}): JSX.Element {
             return;
           }
           const newColWidths = [...colWidths];
-          const newWidth = Math.max(width + widthChange, MIN_COLUMN_WIDTH);
-          newColWidths[columnIndex] = newWidth;
+
+          newColWidths[columnIndex] = width + widthChange;
+          if (newColWidths[columnIndex + 1]) {
+            newColWidths[columnIndex + 1] =
+              newColWidths[columnIndex + 1] - widthChange;
+          }
           tableNode.setColWidths(newColWidths);
         },
         {tag: 'skip-scroll-into-view'},
@@ -330,8 +332,10 @@ function TableCellResizer({editor}: {editor: LexicalEditor}): JSX.Element {
             const heightChange = (event.clientY - y) / zoom;
             updateRowHeight(heightChange);
           } else {
+            const table = activeCell.elem.closest('table');
+            const tableWidth = table?.clientWidth ?? 1;
             const widthChange = (event.clientX - x) / zoom;
-            updateColumnWidth(widthChange);
+            updateColumnWidth((widthChange / tableWidth) * 100);
           }
 
           resetState();
