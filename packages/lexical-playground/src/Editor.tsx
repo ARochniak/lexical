@@ -26,6 +26,8 @@ import {SelectionAlwaysOnDisplay} from '@lexical/react/LexicalSelectionAlwaysOnD
 import {TabIndentationPlugin} from '@lexical/react/LexicalTabIndentationPlugin';
 import {TablePlugin} from '@lexical/react/LexicalTablePlugin';
 import {useLexicalEditable} from '@lexical/react/useLexicalEditable';
+import {$createTableNodeWithDimensions} from '@lexical/table';
+import {$getRoot} from 'lexical';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {CAN_USE_DOM} from 'shared/canUseDOM';
@@ -138,6 +140,14 @@ export default function Editor(): JSX.Element {
       window.removeEventListener('resize', updateViewPortWidth);
     };
   }, [isSmallWidthViewport]);
+
+  useEffect(() => {
+    editor.update(() => {
+      const root = $getRoot();
+      const table = $createTableNodeWithDimensions(2, 2);
+      root.append(table);
+    });
+  }, [editor]);
 
   return (
     <>

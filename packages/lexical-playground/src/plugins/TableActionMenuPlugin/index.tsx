@@ -122,6 +122,10 @@ type TableCellActionMenuProps = Readonly<{
     title: string,
     showModal: (onClose: () => void) => JSX.Element,
   ) => void;
+  showResizingModal: (
+    title: string,
+    showModal: (onClose: () => void) => JSX.Element,
+  ) => void;
   tableCellNode: TableCellNode;
   cellMerge: boolean;
 }>;
@@ -133,6 +137,7 @@ function TableActionMenu({
   contextRef,
   cellMerge,
   showColorPickerModal,
+  showResizingModal,
 }: TableCellActionMenuProps) {
   const [editor] = useLexicalComposerContext();
   const dropDownRef = useRef<HTMLDivElement | null>(null);
@@ -597,6 +602,19 @@ function TableActionMenu({
     }
   }
 
+  const resizeTableAtSelection = useCallback(
+    (width: string) => {
+      editor.update(
+        () => {
+          const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode);
+          tableNode.setStyle(`width: ${width}`);
+        },
+        {discrete: true},
+      );
+    },
+    [editor, tableCellNode],
+  );
+
   return createPortal(
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
@@ -775,6 +793,24 @@ function TableActionMenu({
           column header
         </span>
       </button>
+      <button
+        type="button"
+        className="item"
+        onClick={() => {
+          setIsMenuOpen(false);
+          showResizingModal('Resize table', () => (
+            <div>
+              <input
+                onChange={(e) => {
+                  const width = e.target.value;
+                  resizeTableAtSelection(width);
+                }}
+              />
+            </div>
+          ));
+        }}>
+        <span className="text">Resize table</span>
+      </button>
     </div>,
     document.body,
   );
@@ -798,6 +834,7 @@ function TableCellActionMenuContainer({
   );
 
   const [colorPickerModal, showColorPickerModal] = useModal();
+  const [resizingModal, showResizingModal] = useModal();
 
   const $moveMenu = useCallback(() => {
     const menu = menuButtonRef.current;
@@ -962,6 +999,7 @@ function TableCellActionMenuContainer({
             <i className="chevron-down" />
           </button>
           {colorPickerModal}
+          {resizingModal}
           {isMenuOpen && (
             <TableActionMenu
               contextRef={menuRootRef}
@@ -970,6 +1008,7 @@ function TableCellActionMenuContainer({
               tableCellNode={tableCellNode}
               cellMerge={cellMerge}
               showColorPickerModal={showColorPickerModal}
+              showResizingModal={showResizingModal}
             />
           )}
         </>

@@ -6,12 +6,11 @@
  *
  */
 
-import type {JSX} from 'react';
-
 import {$createLinkNode} from '@lexical/link';
 import {$createListItemNode, $createListNode} from '@lexical/list';
 import {LexicalComposer} from '@lexical/react/LexicalComposer';
 import {$createHeadingNode, $createQuoteNode} from '@lexical/rich-text';
+import {TableNode} from '@lexical/table';
 import {
   $createParagraphNode,
   $createTextNode,
@@ -20,6 +19,7 @@ import {
   DOMConversionMap,
   TextNode,
 } from 'lexical';
+import {type JSX} from 'react';
 
 import {isDevPlayground} from './appSettings';
 import {FlashMessageContext} from './context/FlashMessageContext';
@@ -28,6 +28,7 @@ import {SharedHistoryContext} from './context/SharedHistoryContext';
 import {ToolbarContext} from './context/ToolbarContext';
 import Editor from './Editor';
 import logo from './images/logo.svg';
+import {DecoratedTableNode} from './nodes/DecoratedTableNode';
 import PlaygroundNodes from './nodes/PlaygroundNodes';
 import DocsPlugin from './plugins/DocsPlugin';
 import PasteLogPlugin from './plugins/PasteLogPlugin';
@@ -201,7 +202,15 @@ function App(): JSX.Element {
       : $prepopulatedRichText,
     html: {import: buildImportMap()},
     namespace: 'Playground',
-    nodes: [...PlaygroundNodes],
+    nodes: [
+      ...PlaygroundNodes,
+      DecoratedTableNode,
+      {
+        replace: TableNode,
+        with: () => new DecoratedTableNode(),
+        withKlass: DecoratedTableNode,
+      },
+    ],
     onError: (error: Error) => {
       throw error;
     },

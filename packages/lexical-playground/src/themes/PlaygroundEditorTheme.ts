@@ -93,7 +93,7 @@ const theme: EditorThemeClasses = {
   rtl: 'PlaygroundEditorTheme__rtl',
   specialText: 'PlaygroundEditorTheme__specialText',
   tab: 'PlaygroundEditorTheme__tabNode',
-  table: 'PlaygroundEditorTheme__table',
+  table: 'bwtablemarginb bwwidth85 bwblockalignc',
   tableAddColumns: 'PlaygroundEditorTheme__tableAddColumns',
   tableAddRows: 'PlaygroundEditorTheme__tableAddRows',
   tableAlignment: {
