@@ -12,6 +12,7 @@
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
+  gap: 8px;
 }
 .Input__label {
   display: flex;
@@ -29,4 +30,9 @@
   font-size: 16px;
   border-radius: 5px;
   min-width: 0;
+}
+.Input__input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }

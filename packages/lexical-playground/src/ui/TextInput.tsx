@@ -6,7 +6,7 @@
  *
  */
 
-import type {JSX} from 'react';
+import type {JSX, ReactNode} from 'react';
 
 import './Input.css';
 
@@ -18,8 +18,10 @@ type Props = Readonly<{
   label: string;
   onChange: (val: string) => void;
   placeholder?: string;
-  value: string;
+  value?: string;
   type?: HTMLInputTypeAttribute;
+  defaultValue?: string;
+  append?: ReactNode;
 }>;
 
 export default function TextInput({
@@ -29,20 +31,26 @@ export default function TextInput({
   placeholder = '',
   'data-test-id': dataTestId,
   type = 'text',
+  defaultValue,
+  append,
 }: Props): JSX.Element {
   return (
     <div className="Input__wrapper">
       <label className="Input__label">{label}</label>
-      <input
-        type={type}
-        className="Input__input"
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => {
-          onChange(e.target.value);
-        }}
-        data-test-id={dataTestId}
-      />
+      <div className="Input__input-wrapper">
+        <input
+          type={type}
+          className="Input__input"
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => {
+            onChange(e.target.value);
+          }}
+          data-test-id={dataTestId}
+          defaultValue={defaultValue}
+        />
+        {append}
+      </div>
     </div>
   );
 }

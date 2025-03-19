@@ -89,9 +89,8 @@ function TableCellResizer({editor}: {editor: LexicalEditor}): JSX.Element {
         }
 
         const numColumns = tableNode.getColumnCount();
-        const columnWidth = MIN_COLUMN_WIDTH;
 
-        tableNode.setColWidths(Array(numColumns).fill(columnWidth));
+        tableNode.setColWidths(Array(numColumns).fill(100 / numColumns));
         return tableNode;
       }),
     );

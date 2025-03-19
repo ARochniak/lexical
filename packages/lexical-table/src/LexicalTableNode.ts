@@ -70,7 +70,7 @@ function updateColgroup(
     const col = document.createElement('col');
     const width = colWidths && colWidths[i];
     if (width) {
-      col.style.width = `${width}px`;
+      col.style.width = `${width}%`;
     }
     cols.push(col);
   }

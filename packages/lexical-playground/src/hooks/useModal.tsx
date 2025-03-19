@@ -13,7 +13,9 @@ import * as React from 'react';
 
 import Modal from '../ui/Modal';
 
-export default function useModal(): [
+export default function useModal(
+  onCloseProp?: () => void,
+): [
   JSX.Element | null,
   (title: string, showModal: (onClose: () => void) => JSX.Element) => void,
 ] {
@@ -24,8 +26,9 @@ export default function useModal(): [
   }>(null);
 
   const onClose = useCallback(() => {
+    onCloseProp?.();
     setModalContent(null);
-  }, []);
+  }, [onCloseProp]);
 
   const modal = useMemo(() => {
     if (modalContent === null) {

@@ -46,7 +46,6 @@ import {
   isDOMNode,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
-import * as React from 'react';
 import {ReactPortal, useCallback, useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import invariant from 'shared/invariant';
@@ -54,6 +53,7 @@ import invariant from 'shared/invariant';
 import useModal from '../../hooks/useModal';
 import ColorPicker from '../../ui/ColorPicker';
 import DropDown, {DropDownItem} from '../../ui/DropDown';
+import {TableResizeAction} from './TableResizeAction';
 
 function computeSelectionCount(selection: TableSelection): {
   columns: number;
@@ -602,19 +602,6 @@ function TableActionMenu({
     }
   }
 
-  const resizeTableAtSelection = useCallback(
-    (width: string) => {
-      editor.update(
-        () => {
-          const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode);
-          tableNode.setStyle(`width: ${width}`);
-        },
-        {discrete: true},
-      );
-    },
-    [editor, tableCellNode],
-  );
-
   return createPortal(
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
@@ -793,24 +780,11 @@ function TableActionMenu({
           column header
         </span>
       </button>
-      <button
-        type="button"
-        className="item"
-        onClick={() => {
-          setIsMenuOpen(false);
-          showResizingModal('Resize table', () => (
-            <div>
-              <input
-                onChange={(e) => {
-                  const width = e.target.value;
-                  resizeTableAtSelection(width);
-                }}
-              />
-            </div>
-          ));
-        }}>
-        <span className="text">Resize table</span>
-      </button>
+      <TableResizeAction
+        tableCellNode={tableCellNode}
+        setIsMenuOpen={setIsMenuOpen}
+        showResizingModal={showResizingModal}
+      />
     </div>,
     document.body,
   );
@@ -834,7 +808,11 @@ function TableCellActionMenuContainer({
   );
 
   const [colorPickerModal, showColorPickerModal] = useModal();
-  const [resizingModal, showResizingModal] = useModal();
+  const isResizingModalOpenRef = useRef(false);
+  const onResizingModalClose = useCallback(() => {
+    isResizingModalOpenRef.current = false;
+  }, []);
+  const [resizingModal, showResizingModal] = useModal(onResizingModalClose);
 
   const $moveMenu = useCallback(() => {
     const menu = menuButtonRef.current;
@@ -949,6 +927,9 @@ function TableCellActionMenuContainer({
       editor.getEditorState().read($moveMenu);
     };
     const delayedCallback = () => {
+      if (isResizingModalOpenRef.current) {
+        return false;
+      }
       if (timeoutId === undefined) {
         timeoutId = setTimeout(callback, 0);
       }
@@ -1008,7 +989,10 @@ function TableCellActionMenuContainer({
               tableCellNode={tableCellNode}
               cellMerge={cellMerge}
               showColorPickerModal={showColorPickerModal}
-              showResizingModal={showResizingModal}
+              showResizingModal={(title, showModal) => {
+                isResizingModalOpenRef.current = true;
+                showResizingModal(title, showModal);
+              }}
             />
           )}
         </>
