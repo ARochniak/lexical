@@ -1354,7 +1354,7 @@ i.page-break,
   align-items: center;
   border: 0;
   position: absolute;
-  top: 10px;
+  top: 0;
   right: 10px;
   border-radius: 15px;
   color: #222;
