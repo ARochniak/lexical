@@ -6,7 +6,7 @@
  *
  */
 import {TableNode} from '@lexical/table';
-import {EditorConfig} from 'lexical';
+import {EditorConfig, LexicalEditor} from 'lexical';
 
 export class DecoratedTableNode extends TableNode {
   static getType() {
@@ -17,8 +17,8 @@ export class DecoratedTableNode extends TableNode {
     return new DecoratedTableNode(node.__key);
   }
 
-  createDOM(config: EditorConfig) {
-    const container = super.createDOM(config) as HTMLTableElement;
+  createDOM(config: EditorConfig, editor?: LexicalEditor) {
+    const container = super.createDOM(config, editor) as HTMLTableElement;
     container.classList.add('bw-release-container');
     const table = container.querySelector('table') as HTMLTableElement;
 
