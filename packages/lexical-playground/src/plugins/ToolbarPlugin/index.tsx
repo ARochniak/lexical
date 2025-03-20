@@ -1016,6 +1016,19 @@ export default function ToolbarPlugin({
               <span className="shortcut">{SHORTCUTS.CLEAR_FORMATTING}</span>
             </DropDownItem>
           </DropDown>
+          <button
+            onClick={() => {
+              showModal('Insert Table', (onClose) => (
+                <InsertTableDialog
+                  activeEditor={activeEditor}
+                  onClose={onClose}
+                />
+              ));
+            }}
+            className="toolbar-item spaced">
+            <i className="icon table" />
+            <span className="text">Table</span>
+          </button>
           {canViewerSeeInsertDropdown && (
             <>
               <Divider />
@@ -1091,19 +1104,6 @@ export default function ToolbarPlugin({
                   className="item">
                   <i className="icon diagram-2" />
                   <span className="text">Excalidraw</span>
-                </DropDownItem>
-                <DropDownItem
-                  onClick={() => {
-                    showModal('Insert Table', (onClose) => (
-                      <InsertTableDialog
-                        activeEditor={activeEditor}
-                        onClose={onClose}
-                      />
-                    ));
-                  }}
-                  className="item">
-                  <i className="icon table" />
-                  <span className="text">Table</span>
                 </DropDownItem>
                 <DropDownItem
                   onClick={() => {
