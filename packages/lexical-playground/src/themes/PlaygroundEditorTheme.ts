@@ -100,7 +100,8 @@ const theme: EditorThemeClasses = {
     center: 'PlaygroundEditorTheme__tableAlignmentCenter',
     right: 'PlaygroundEditorTheme__tableAlignmentRight',
   },
-  tableCell: 'PlaygroundEditorTheme__tableCell',
+  tableCell:
+    'PlaygroundEditorTheme__tableCell bwvertalignb bwsinglebottom bwleftsingle bwtopsingle bwpadl1 bwnowrap bwrightsingle',
   tableCellActionButton: 'PlaygroundEditorTheme__tableCellActionButton',
   tableCellActionButtonContainer:
     'PlaygroundEditorTheme__tableCellActionButtonContainer',
