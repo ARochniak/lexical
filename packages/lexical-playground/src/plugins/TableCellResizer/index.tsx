@@ -333,9 +333,9 @@ function TableCellResizer({editor}: {editor: LexicalEditor}): JSX.Element {
             updateRowHeight(heightChange);
           } else {
             const table = activeCell.elem.closest('table');
-            const tableWidth = table?.clientWidth ?? 1;
+            const tableWidth = table?.clientWidth ?? 100;
             const widthChange = (event.clientX - x) / zoom;
-            updateColumnWidth((widthChange / tableWidth) * 100);
+            updateColumnWidth(Math.round((widthChange / tableWidth) * 100));
           }
 
           resetState();
