@@ -43,7 +43,20 @@ export function $createTableNodeWithDimensions(
 ): TableNode {
   const tableNode = $createTableNode();
 
-  for (let iRow = 0; iRow < rowCount; iRow++) {
+  // insert first merged cell
+  const tableFirstRowNode = $createTableRowNode();
+  const tableFirstCellNode = $createTableCellNode(
+    TableCellHeaderStates.NO_STATUS,
+    columnCount,
+  );
+  tableFirstCellNode.setBackgroundColor('#cef');
+  const firstRowParagraphNode = $createParagraphNode();
+  firstRowParagraphNode.append($createTextNode());
+  tableFirstCellNode.append(firstRowParagraphNode);
+  tableFirstRowNode.append(tableFirstCellNode);
+  tableNode.append(tableFirstRowNode);
+
+  for (let iRow = 1; iRow < rowCount; iRow++) {
     const tableRowNode = $createTableRowNode();
 
     for (let iColumn = 0; iColumn < columnCount; iColumn++) {

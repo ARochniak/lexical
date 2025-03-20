@@ -7,9 +7,10 @@
  */
 
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {$createTableNodeWithDimensions} from '@lexical/table';
 import {$getRoot} from 'lexical';
 import {useEffect} from 'react';
+
+import {$createTableNodeWithDimensions} from '../utils/createTableNodeWithDimensions';
 
 export const useInsertTable = () => {
   const [editor] = useLexicalComposerContext();

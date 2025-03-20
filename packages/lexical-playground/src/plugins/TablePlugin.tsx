@@ -9,19 +9,21 @@
 import type {JSX} from 'react';
 
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
+import {TableCellNode, TableNode, TableRowNode} from '@lexical/table';
 import {
-  INSERT_TABLE_COMMAND,
-  TableCellNode,
-  TableNode,
-  TableRowNode,
-} from '@lexical/table';
-import {EditorThemeClasses, Klass, LexicalEditor, LexicalNode} from 'lexical';
+  $getRoot,
+  EditorThemeClasses,
+  Klass,
+  LexicalEditor,
+  LexicalNode,
+} from 'lexical';
 import {createContext, useContext, useEffect, useMemo, useState} from 'react';
 import invariant from 'shared/invariant';
 
 import Button from '../ui/Button';
 import {DialogActions} from '../ui/Dialog';
 import TextInput from '../ui/TextInput';
+import {$createTableNodeWithDimensions} from '../utils/createTableNodeWithDimensions';
 
 export type InsertTableCommandPayload = Readonly<{
   columns: string;
@@ -101,9 +103,14 @@ export function InsertTableDialog({
   }, [rows, columns]);
 
   const onClick = () => {
-    activeEditor.dispatchCommand(INSERT_TABLE_COMMAND, {
-      columns,
-      rows,
+    activeEditor.update(() => {
+      const root = $getRoot();
+      const table = $createTableNodeWithDimensions(
+        Number(rows),
+        Number(columns),
+        false,
+      );
+      root.append(table);
     });
 
     onClose();
